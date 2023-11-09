@@ -1,9 +1,10 @@
 package net.javaguides.hibernate.dao;
 
-import jakarta.persistence.Query;
 import net.javaguides.hibernate.entity.Student;
 import net.javaguides.hibernate.util.HibernateUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
@@ -12,7 +13,10 @@ public class StudentDao {
 
     public void saveStudent(Student student) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+
+            session = HibernateUtil.getSessionFactory().openSession();
 
             //start transaction
             transaction = session.beginTransaction();
@@ -25,12 +29,18 @@ public class StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     public void insertStudent() {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             // start a transaction
             transaction = session.beginTransaction();
             System.out.println("session>>>>>>>>>>" + session);
@@ -48,12 +58,20 @@ public class StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     public void insertStudentByQuery(String email, String first_name, String last_name) {
+
+        Session session = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+
+            session = HibernateUtil.getSessionFactory().openSession();
             // start a transaction
             transaction = session.beginTransaction();
             System.out.println("session>>>>>>>>>>" + session);
@@ -73,12 +91,19 @@ public class StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     public void updateStudent(Student student) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+
+            session = HibernateUtil.getSessionFactory().openSession();
             // start a transaction
             transaction = session.beginTransaction();
 
@@ -97,18 +122,25 @@ public class StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     public void deleteStudent(int id) {
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+
+            session = HibernateUtil.getSessionFactory().openSession();
             // start a transaction
             transaction = session.beginTransaction();
 
             // Delete a student object
-            Student student = session.get(Student.class, id);
+            Student student = (Student) session.get(Student.class, id);
             if (student != null) {
                 String hql = "DELETE FROM Student " + "WHERE id = :studentId";
                 Query query = session.createQuery(hql);
@@ -124,14 +156,20 @@ public class StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
     public Student getStudent(int id) {
 
+        Session session = null;
         Transaction transaction = null;
         Student student = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             // start a transaction
             transaction = session.beginTransaction();
 
@@ -140,7 +178,7 @@ public class StudentDao {
             //String hql = "select S.id, S.firstName FROM Student S WHERE S.id = :studentId";
             Query query = session.createQuery(hql);
             query.setParameter("studentId", id);
-            List results = query.getResultList();
+            List results = query.list();
 
             if (results != null && !results.isEmpty()) {
                 student = (Student) results.get(0);
@@ -152,14 +190,29 @@ public class StudentDao {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return student;
     }
 
     public List<Student> getStudents() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Student", Student.class).list();
+        Session session = null;
+        List<Student> students = null;
+        try {
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            session = sessionFactory.openSession();
+            students = session.createQuery("from Student").list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
+        return students;
     }
 
 }
