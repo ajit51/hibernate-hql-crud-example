@@ -6,6 +6,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class StudentQueryDao {
@@ -16,14 +19,26 @@ public class StudentQueryDao {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
 
-            //String hql = " FROM Student s WHERE s.id = :studentId";
-            String inQuery = "'Sameer', 'Atul', 'Krunal'";
-            //String hql = "FROM Student S WHERE S.id = :studentId";
-            String hql = "FROM Student S WHERE S.firstName in (:studentName)";
-            Query query = session.createQuery(hql);
-            //query.setParameter("studentId", id);
-            query.setParameter("studentName", inQuery);
-            System.out.println("query>>>>>>>" + query);
+            String fromQuery = "FROM Student S ";
+            String whereQuery = "WHERE S.firstName in (:firstName)";
+
+            //String[] names = new String[]{"Krunal", "Sameer", "aman"};
+
+            String inStr = "'Krunal', 'Sameer', 'Aman', 'atul'";
+            String[] names = inStr.split(",");
+            List nameList = new ArrayList<>();
+            for (String str : names){
+                String trim = str.trim().replaceAll("'", "");
+               // String s = trim.replaceAll("'", "");
+                nameList.add(trim);
+            }
+
+            String hqlQuery = fromQuery.concat(whereQuery);
+            Query query = session.createQuery(hqlQuery);
+            query.setParameterList("firstName", nameList);
+
+            System.out.println("query>>>>>"+query.toString());
+
             List<Student> results = (List<Student>) query.list();
 
             results.forEach(s -> System.out.println(s));

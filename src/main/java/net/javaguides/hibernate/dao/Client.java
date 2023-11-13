@@ -5,6 +5,6 @@ import net.javaguides.hibernate.entity.Student;
 public class Client {
     public static void main(String[] args) {
         StudentQueryDao dao = new StudentQueryDao();
-        dao.getStudent(5);
+        dao.getStudent(2);
     }
 }
