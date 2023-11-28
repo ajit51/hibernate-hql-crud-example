@@ -1,0 +1,12 @@
+1. Create sequence
+
+CREATE SEQUENCE ID_SEQ
+    INCREMENT BY 1
+    START WITH 1
+    MINVALUE 1
+    MAXVALUE 1000
+    CYCLE
+    CACHE 2;
+
+ 2. How to see sequence value
+ select ID_SEQ.nextval from dual;

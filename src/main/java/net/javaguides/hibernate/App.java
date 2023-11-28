@@ -8,9 +8,9 @@ import java.util.List;
 public class App {
     public static void main(String[] args) {
         StudentDao studentDao = new StudentDao();
-        //Student student = new Student("Ramesh", "Fadatare", "rameshfadatare@javaguides.com");
+        Student student = new Student("Ramesh", "Fadatare", "rameshfadatare@javaguides.com");
         //Student student = new Student("Krunal", "pandey", "Krunal@gmail.com");
-        //studentDao.saveStudent(student);
+        studentDao.saveStudent(student);
 
         //studentDao.insertStudent();
         //studentDao.insertStudentByQuery("ajitk433@gmail.com", "Ajit", "Kumar");
@@ -20,8 +20,8 @@ public class App {
        // studentDao.updateStudent(student1);
 
         // get students
-        List< Student > students = studentDao.getStudents();
-        students.forEach(s -> System.out.println(s.getFirstName()));
+        //List< Student > students = studentDao.getStudents();
+        //students.forEach(s -> System.out.println(s.getFirstName()));
 
         // get single student
         //Student student2 = studentDao.getStudent(2);
