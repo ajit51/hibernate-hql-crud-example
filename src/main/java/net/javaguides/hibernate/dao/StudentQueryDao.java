@@ -24,7 +24,7 @@ public class StudentQueryDao {
 
             //String[] names = new String[]{"Krunal", "Sameer", "aman"};
 
-            String inStr = "'Krunal', 'Sameer', 'Aman', 'atul'";
+            String inStr = "'Krunal', 'Sameer', 'Aman', 'Ramesh'";
             String[] names = inStr.split(",");
             List nameList = new ArrayList<>();
             for (String str : names){
@@ -41,7 +41,49 @@ public class StudentQueryDao {
 
             List<Student> results = (List<Student>) query.list();
 
+            System.out.println("results size>>>>>>>>>"+results.size());
             results.forEach(s -> System.out.println(s));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getStudentForCondition() {
+
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+
+            String fName = "Krunal";
+            String lName = "Singh";
+            //String email = "krunal@gmail.com";
+            String email = null;
+            String fromQuery = "FROM Student S where";
+            StringBuffer sb = new StringBuffer();
+            if (fName != null){
+                sb.append(" S.firstName = :firstName");
+            }
+            if (email != null){
+                sb.append(" and S.email = :email");
+            }
+
+            fromQuery = fromQuery + sb.toString();
+
+            Query query = session.createQuery(fromQuery);
+            if (fName != null){
+                query.setParameter("firstName", fName);
+            }
+            if (email != null){
+                query.setParameter("email", email);
+            }
+
+            List list = query.list();
+            System.out.println("fromQuery>>>>>>"+fromQuery);
+            System.out.println("query>>>>>>"+query);
+
+            list.forEach(s -> System.out.println(s));
+
 
         } catch (Exception e) {
             e.printStackTrace();

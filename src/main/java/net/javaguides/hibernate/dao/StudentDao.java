@@ -45,8 +45,8 @@ public class StudentDao {
             transaction = session.beginTransaction();
             System.out.println("session>>>>>>>>>>" + session);
 
-            String hql = "INSERT INTO Student (firstName, lastName, email) " +
-                    "SELECT firstName, lastName, email FROM Student";
+            String hql = "INSERT INTO Student (firstName, lastName, email, dob) " +
+                    "SELECT firstName, lastName, email, dob FROM Student";
             Query query = session.createQuery(hql);
             int result = query.executeUpdate();
             System.out.println("Rows affected: " + result);
